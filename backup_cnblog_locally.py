@@ -16,7 +16,9 @@ def download_img(img_address, local_address):
     if response.status_code == 200:
         with open(image_filename_with_dir, 'wb') as f:
             f.write(response.content)
-            return image_filename_with_dir
+    else:
+        print(f'\033[33m{img_address, local_address}\033[0m')
+    return image_filename_with_dir
 
 
 # 替换网上的图片
@@ -35,11 +37,13 @@ def main():
         blog_list = json.load(fp)
 
     for blog in blog_list:
-        title = blog['Title']
+        title = blog['Title'].replace('/', '_').replace(' ', '_')
         if blog['IsMarkdown']:
             with open(f'{title}.md', mode='wt', encoding='utf-8') as fp:
                 fp.write(replace_blog_img(blog['Body'], title))
-        print(f'{title}已经解析OK！')
+            time.sleep(2)
+            print(f'{title}已经解析OK！')
+    print('已全部解析完成！')
 
 
 def test():
@@ -47,11 +51,11 @@ def test():
         blog_list = json.load(fp)
 
     blog = blog_list[1]
-    title = blog['Title']
+    title = blog['Title'].replace('/', '_')
     if blog['IsMarkdown']:
         with open(f'{title}.md', mode='wt', encoding='utf-8') as fp:
             fp.write(replace_blog_img(blog['Body'], title))
 
 
 if __name__ == '__main__':
-    test()
+    main()
