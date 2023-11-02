@@ -37,7 +37,7 @@ def main():
         blog_list = json.load(fp)
 
     for blog in blog_list:
-        title = blog['Title'].replace(['/','!', '@', '#', '$'], '_')
+        title = blog['Title'].replace('/', '_')
         if blog['IsMarkdown']:
             with open(f'{title}.md', mode='wt', encoding='utf-8') as fp:
                 fp.write(replace_blog_img(blog['Body'], title))
